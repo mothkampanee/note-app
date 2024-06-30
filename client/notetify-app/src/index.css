@@ -23,4 +23,8 @@
   .btn-primary {
     @apply w-full text-sm bg-[#f1f1f1] p-2 rounded-xl my-1;
   }
+
+  .icon-btn {
+    @apply text-xl text-slate-400 cursor-pointer hover:text-black;
+  }
 }
