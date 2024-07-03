@@ -18,13 +18,13 @@ function Navbar() {
     setSearchQuery("");
   };
   return (
-    <section className="bg-white flex justify-between items-center px-6 py-2">
+    <section className="bg-white flex justify-between items-baseline px-6 py-6">
       <div className="font-bold text-3xl">Notetify</div>
 
       <SearchBar
         value={searchQuery}
-        onChange={({ target }) => {
-          setSearchQuery(target.value);
+        onChange={(event) => {
+          setSearchQuery(event.target.value);
         }}
         handleSearch={handleSearch}
         onClearSearch={onClearSearch}
