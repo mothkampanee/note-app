@@ -1,1 +1,1 @@
-export const BASE_URL = "note-app-one-teal.vercel.app";
+export const BASE_URL = "note-app-six-lyart.vercel.app";
