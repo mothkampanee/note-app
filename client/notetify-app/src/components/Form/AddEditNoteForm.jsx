@@ -1,15 +1,61 @@
 import { useState } from "react";
 import TagInput from "../Input/TagInput";
 import { MdClose } from "react-icons/md";
+import axiosInstance from "../../utils/axiosInstance";
 
-function AddEditNoteForm({ noteData, type, onClose }) {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [tags, setTags] = useState([]);
+function AddEditNoteForm({
+  noteData,
+  type,
+  getAllNotes,
+  onClose,
+  showToastMessage,
+}) {
+  const [title, setTitle] = useState(noteData?.title || "");
+  const [content, setContent] = useState(noteData?.content || "");
+  const [tags, setTags] = useState(noteData?.tags || []);
   const [error, setError] = useState(null);
 
-  const createNote = async () => {};
-  const editNote = async () => {};
+  const addNewNote = async () => {
+    try {
+      const response = await axiosInstance.post("/addNote", {
+        title,
+        content,
+        tags,
+      });
+
+      if (response.data && response.data.note) {
+        showToastMessage("Note added successfully");
+        getAllNotes();
+        onClose();
+      }
+    } catch (error) {
+      if (error.response && error.response.data && error.response.message) {
+        setError(error.response.data.message);
+      }
+    }
+  };
+
+  const editNote = async () => {
+    const noteId = noteData._id;
+
+    try {
+      const response = await axiosInstance.put(`/editNote/${noteId}`, {
+        title,
+        content,
+        tags,
+      });
+
+      if (response.data && response.data.note) {
+        showToastMessage("Note updated successfully");
+        getAllNotes();
+        onClose();
+      }
+    } catch (error) {
+      if (error.response && error.response.data && error.response.message) {
+        setError(error.response.data.message);
+      }
+    }
+  };
 
   const handleCreateNote = () => {
     if (!title) {
@@ -27,7 +73,7 @@ function AddEditNoteForm({ noteData, type, onClose }) {
     if (type === "edit") {
       editNote();
     } else {
-      createNote();
+      addNewNote();
     }
   };
 
@@ -74,7 +120,7 @@ function AddEditNoteForm({ noteData, type, onClose }) {
         className="btn-primary font-medium mt-5 p-3"
         onClick={handleCreateNote}
       >
-        Create an note
+        {type === "edit" ? "Update Note" : "Create Note"}
       </button>
     </div>
   );

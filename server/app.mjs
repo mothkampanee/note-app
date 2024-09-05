@@ -149,7 +149,9 @@ app.post("/addNote", authenticateToken, async (req, res) => {
   }
 
   if (!content) {
-    return res.status(400).json({ error: true, message: "Conten is required" });
+    return res
+      .status(400)
+      .json({ error: true, message: "Content is required" });
   }
 
   try {
@@ -291,6 +293,40 @@ app.put("/updateNotePinned/:noteId", authenticateToken, async (req, res) => {
       error: false,
       note,
       message: "Note updated successfully",
+    });
+  } catch {
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
+});
+
+// search notes
+app.get("/searchNote", authenticateToken, async (req, res) => {
+  const { user } = req.user;
+  const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({
+      error: true,
+      message: "Search query is required",
+    });
+  }
+
+  try {
+    const matchingNotes = await Note.find({
+      userId: user._id,
+      $or: [
+        { title: { $regex: new RegExp(query, "i") } },
+        { content: { $regex: new RegExp(query, "i") } },
+      ],
+    });
+
+    return res.status(200).json({
+      error: false,
+      notes: matchingNotes,
+      message: "Notes matching the search query retrieved successfully",
     });
   } catch {
     return res.status(500).json({
