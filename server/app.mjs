@@ -6,24 +6,14 @@ import jwt from "jsonwebtoken";
 import { authenticateToken } from "./utilites.mjs";
 import User from "./models/user.model.mjs";
 import Note from "./models/note.model.mjs";
-import { readFile } from "fs/promises";
 
-const config = JSON.parse(
-  await readFile(new URL("./config.json", import.meta.url))
-);
-
-mongoose.connect(config.connectionString);
+mongoose.connect(process.env.MONGODB_URL);
 
 const app = express();
 const port = 8000;
 
 app.use(cors());
 app.use(express.json());
-app.use(
-  cors({
-    origin: "*",
-  })
-);
 
 app.get("/", (req, res) => {
   res.json({ message: "hello" });
