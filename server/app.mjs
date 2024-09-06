@@ -12,16 +12,27 @@ mongoose.connect(process.env.MONGODB_URL);
 const app = express();
 const port = 8000;
 
-app.use(cors());
+app.use(
+  cors({
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    origin: "https://note-app-three-sand.vercel.app",
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({ message: "hello" });
 });
 
+app.get("/b", async (req, res) => {
+  res.send("hello");
+});
+
 // create account
 app.post("/createAccount", async (req, res) => {
   const { fullName, email, password } = req.body;
+
+  console.log(req.body);
 
   if (!fullName) {
     return res.status(400).json({

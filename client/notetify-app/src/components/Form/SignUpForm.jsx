@@ -57,6 +57,7 @@ function SignUpForm() {
         setError(error.response.data.message);
       } else {
         setError("an unexpected error occurred. Please try again.");
+        console.log("error", error);
       }
     }
   };
