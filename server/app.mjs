@@ -15,9 +15,10 @@ const port = 8000;
 app.use(
   cors({
     methods: ["GET", "POST", "DELETE", "PUT"],
-    origin: "https://note-app-three-sand.vercel.app",
+    origin: "https://note-app-redi.vercel.app/",
   })
 );
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
