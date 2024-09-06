@@ -15,7 +15,7 @@ const port = 8000;
 app.use(
   cors({
     methods: ["GET", "POST", "DELETE", "PUT"],
-    origin: "https://note-app-redi.vercel.app/",
+    origin: "https://note-app-redi.vercel.app",
   })
 );
 
