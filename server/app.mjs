@@ -14,8 +14,7 @@ const port = 8000;
 
 app.use(
   cors({
-    methods: ["GET", "POST", "DELETE", "PUT"],
-    origin: "https://note-app-redi.vercel.app",
+    origin: "*",
   })
 );
 
@@ -25,15 +24,9 @@ app.get("/", (req, res) => {
   res.json({ message: "hello" });
 });
 
-app.get("/b", async (req, res) => {
-  res.send("hello");
-});
-
 // create account
 app.post("/createAccount", async (req, res) => {
   const { fullName, email, password } = req.body;
-
-  console.log(req.body);
 
   if (!fullName) {
     return res.status(400).json({
@@ -70,10 +63,10 @@ app.post("/createAccount", async (req, res) => {
   await user.save();
 
   const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "36000m",
+    expiresIn: "1d",
   });
 
-  return res.json({
+  return res.status(200).json({
     error: false,
     user,
     accessToken,
